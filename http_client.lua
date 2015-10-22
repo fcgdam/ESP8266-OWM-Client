@@ -2,6 +2,7 @@
 local json = require "cjson"
 local Location = "Lisbon"
 local Metrics  = "metric"
+local OWAPIKEY = "You must register on openWeather get the API Key and put it here"
 
 local busid = 0  -- I2C Bus ID. Always zero
 local sda= 4     -- GPIO2 pin mapping is 4
@@ -32,7 +33,7 @@ function getWeather()
       --print(payload)
     end )
   conn:connect(80,"188.226.175.223")
-  conn:send("GET /data/2.5/find?q="..Location.."&units="..Metrics.."\r\nHTTP/1.1\r\nHost: api.openweathermap.org\r\n"
+  conn:send("GET /data/2.5/find?q="..Location.."&units="..Metrics.."&APPID="..OWAPIKEY.."\r\nHTTP/1.1\r\nHost: api.openweathermap.org\r\n"
         .."Connection: keep-alive\r\nAccept: */*\r\n\r\n")
   WSCalls = WSCalls + 1  
   if Humidity == 0 then
@@ -44,6 +45,7 @@ end
 
 
 getWeather()   -- Get the weather now.
+
 tmr.alarm(5,10000, 0 , getWeather) -- Obter o tempo de 10 em 10m
 lcd = dofile("lcd1602.lua")()
 lcd.light(0)
@@ -51,13 +53,19 @@ lcd.locate(1,0)
 
 function notice() 
 --  print(node.heap()); 
-  lcd.run(1, "Heap: "..node.heap().."  WSCalls: "..WSCalls.."  ", 250, 1, notice) 
+  --lcd.run(1, "Heap: "..node.heap().."  WSCalls: "..WSCalls.."  ", 250, 1, notice) 
+  lcd.run(1, "Desc: "..Wdesc.." Humidity: "..Humidity.."% Wind: "..WindSpeed.."m/s || Heap: "..node.heap().."  WSCalls: "..WSCalls.."  ", 250, 1, notice) 
 end
 
 function noticeWeather()
-  lcd.run(0, "TCurr: "..CurTemp.."C Max: "..MaxTemp.."C Min: "..MinTemp.."C Desc: "..Wdesc.." Humidity: "..Humidity.."% Wind: "..WindSpeed.."m/s   " ,550, 2, noticeWeather )
+  --lcd.run(0, "TCurr: "..CurTemp.."C Max: "..MaxTemp.."C Min: "..MinTemp.."C  ",550, 2, noticeWeather )
+  
+  --lc.put(lcd.locate(0,0),"T: "..CurTemp.."C")
+  lcd.put(lcd.locate(0, 0), "T: "..CurTemp)
+  
 end
 
 notice()
-noticeWeather()
+--noticeWeather()
+tmr.alarm(6, 1000 , 1 , noticeWeather)
 
