@@ -43,7 +43,6 @@ function getWeather()
   end
 end
 
-
 getWeather()   -- Get the weather now.
 
 tmr.alarm(5,10000, 0 , getWeather) -- Obter o tempo de 10 em 10m
@@ -68,4 +67,3 @@ end
 notice()
 --noticeWeather()
 tmr.alarm(6, 1000 , 1 , noticeWeather)
-

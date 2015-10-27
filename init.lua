@@ -5,7 +5,7 @@ CMDFILE = "http_client.lua"   -- File that is executed after connection
 
 -- Some control variables
 wifiTrys     = 0      -- Counter of trys to connect to wifi
-NUMWIFITRYS  = 200    -- Maximum number of WIFI Testings while waiting for connection
+NUMWIFITRYS  = 20    -- Maximum number of WIFI Testings while waiting for connection
 
 -- Change the code of this function that it calls your code.
 function launch()
